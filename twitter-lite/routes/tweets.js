@@ -3,6 +3,9 @@ const router = express.Router();
 const db = require("../db/models");
 const { Tweet } = db;
 const { check, validationResult } = require("express-validator");
+const cors = require("cors");
+
+
 
 const asyncHandler = (handler) => {
   return (req, res, next) => {
@@ -32,7 +35,7 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
-router.get( "/",asyncHandler(async (req, res) => {
+router.get( "/",cors(), asyncHandler(async (req, res) => {
     const tweets = await Tweet.findAll();
     res.json({ tweets });
   })
@@ -52,7 +55,7 @@ router.get("/:id(\\d+)",asyncHandler(async (req, res, next) => {
 
 router.post("/", handleValidationErrors, asyncHandler(async(req,res,next) => {
   const { message } = req.body
-  
+
   const tweet = await Tweet.create({
     message
   })
